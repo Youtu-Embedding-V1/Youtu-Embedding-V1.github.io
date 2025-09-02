@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtu-Embedding-V1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style for table borders */
+        th, td {
+            border: 1px solid #e2e8f0; /* slate-200 */
+        }
+        .lang-btn.active {
+            background-color: #1e293b; /* slate-800 */
+            color: #ffffff;
+        }
+
+        /* Custom styles for code block with syntax highlighting */
+        pre {
+            background-color: #282c34; /* Dark background for code */
+            color: #abb2bf; /* Light text color */
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'JetBrains Mono', monospace; /* Monospaced font */
+            font-size: 0.9em;
+            line-height: 1.5;
+            white-space: pre-wrap; /* Ensures code wraps */
+        }
+
+        code {
+            display: block; /* Make code take full width inside pre */
+        }
+
+        /* Shiki-like syntax highlighting classes */
+        .shiki-keyword { color: #c678dd; } /* e.g., import, def, if, else */
+        .shiki-string { color: #98c379; } /* e.g., "hello world" */
+        .shiki-comment { color: #5c6370; } /* e.g., # This is a comment */
+        .shiki-function { color: #61afef; } /* e.g., encode, print */
+        .shiki-variable { color: #e06c75; } /* e.g., secret_id, inputs */
+        .shiki-class { color: #e5c07b; } /* e.g., Credential, HttpProfile */
+        .shiki-number { color: #d19a66; } /* e.g., 0, 1 */
+        .shiki-operator { color: #56b6c2; } /* e.g., =, ==, +, - */
+        .shiki-punctuation { color: #abb2bf; } /* e.g., ., ,, :, ( ) */
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 sm:p-12">
+            <header class="flex flex-col items-center text-center mb-10 space-y-6">
+                <div class="flex items-center space-x-4">
+                    <img src="logo.svg" alt="Youtu-Embedding-V1 Logo" class="h-12 w-12">
+                    <h1 class="text-4xl font-bold text-slate-900">Youtu-Embedding-V1</h1>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="btn-en" class="lang-btn px-4 py-2 rounded-md text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">English</button>
+                    <button id="btn-zh" class="lang-btn px-4 py-2 rounded-md text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">中文</button>
+                </div>
+            </header>
+
+            <main>
+                <div id="lang-en" class="lang-content space-y-10">
+                    
+                    <section>
+                        <h2 class="text-3xl font-semibold border-b border-slate-200 pb-3 mb-6 text-slate-900 text-center">Introduction</h2>
+                        <p class="mb-4 text-slate-600 leading-relaxed">
+                            Youtu-Embedding-V1 is a powerful, general-purpose text representation model with excellent capabilities. It is accessible via an API and stands out from competitors for the following reasons:
+                        </p>
+                        <ol class="list-decimal list-inside space-y-3 pl-4 text-slate-600 leading-relaxed">
+                            <li><strong class="text-slate-800">Innovative</strong>: Youtu-Embedding-V1 is trained on CoDi, a proprietary framework developed by Tencent. Our innovations in unified formatting, loss functions, and sampling strategies enable the model to achieve comprehensive convergence on multiple tasks with a smaller parameter size and at a lower training cost. For more details, please refer to our <a href="https://arxiv.org/abs/2408.11442v1" target="_blank" class="text-blue-600 hover:underline">paper</a>.</li>
+                            <li><strong class="text-slate-800">Versatile</strong>: Youtu-Embedding-V1 demonstrates strong generalization across a range of tasks, including information retrieval, semantic textual similarity, natural language inference, text classification, and text clustering. Furthermore, we support custom instructions to adapt the model to specific downstream scenarios.</li>
+                            <li><strong class="text-slate-800">Extensible</strong>: We plan to open-source the training framework used for Youtu-Embedding-V1 in the near future, which will allow you to easily transfer it to other types of tasks.</li>
+                        </ol>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-semibold border-b border-slate-200 pb-3 mb-6 text-slate-900 text-center">Performance</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm text-center rounded-lg shadow-sm">
+                                <caption class="text-2xl font-semibold p-4 text-slate-900">C-MTEB</caption>
+                                <thead class="bg-slate-50 text-slate-600 font-medium">
+                                    <tr>
+                                        <th class="p-3">Model</th>
+                                        <th class="p-3">Mean(Task)</th>
+                                        <th class="p-3">Mean(Type)</th>
+                                        <th class="p-3">Class.</th>
+                                        <th class="p-3">Clust.</th>
+                                        <th class="p-3">Pair Class.</th>
+                                        <th class="p-3">Rerank.</th>
+                                        <th class="p-3">Retr.</th>
+                                        <th class="p-3">STS</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr class="hover:bg-slate-50/70"><td>gte-Qwen2-1.5B-instruct</td><td>67.12</td><td>67.79</td><td>72.53</td><td>54.61</td><td>79.50</td><td>68.21</td><td>71.86</td><td>60.05</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>bge-multilingual-gemma2</td><td>67.64</td><td>68.52</td><td>75.31</td><td>59.30</td><td>86.67</td><td>68.28</td><td>73.73</td><td>55.19</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>ritrieve_zh_v1</td><td>72.71</td><td>73.85</td><td>76.88</td><td>66.50</td><td>85.98</td><td>72.86</td><td>76.97</td><td>63.92</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>Qwen3-Embedding-4B</td><td>72.27</td><td>73.51</td><td>75.46</td><td>77.89</td><td>83.34</td><td>66.05</td><td>77.03</td><td>61.26</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>Qwen3-Embedding-8B</td><td>73.84</td><td>75.00</td><td>76.97</td><td>80.08</td><td>84.23</td><td>66.99</td><td>78.21</td><td>63.53</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>Conan-embedding-v2</td><td>74.24</td><td>75.99</td><td>76.47</td><td>68.84</td><td>92.44</td><td>74.41</td><td>78.31</td><td>65.48</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>Seed1.6-embedding</td><td>75.63</td><td>76.68</td><td>77.98</td><td>73.11</td><td>88.71</td><td>71.65</td><td>79.69</td><td>68.94</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>QZhou-Embedding</td><td>76.99</td><td>78.58</td><td>79.99</td><td>70.91</td><td>95.07</td><td>74.85</td><td>78.80</td><td>71.89</td></tr>
+                                    <tr class="bg-blue-100 font-semibold text-black-800 hover:bg-blue-200/60">
+                                        <td>Youtu-Embedding-V1</td>
+                                        <td><strong>77.60</strong></td>
+                                        <td><strong>78.85</strong></td>
+                                        <td>78.04</td>
+                                        <td>79.67</td>
+                                        <td>89.69</td>
+                                        <td>73.85</td>
+                                        <td>80.95</td>
+                                        <td>70.91</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-semibold border-b border-slate-200 pb-3 mb-6 text-slate-900 text-center">Usage</h2>
+                        <p class="mb-4 text-slate-600 leading-relaxed">
+                            API Integration Guide:
+                            <a href="https://cloud.tencent.com/document/product/1772/115343" target="_blank" class="ml-2 text-lg text-blue-600 hover:text-blue-500 font-medium">Tencent Cloud API</a>
+                        </p>
+                        <pre><code class="language-python">
+<span class="shiki-keyword">import</span> <span class="shiki-variable">os</span>
+<span class="shiki-keyword">import</span> <span class="shiki-variable">json</span>
+<span class="shiki-keyword">import</span> <span class="shiki-variable">types</span>
+<span class="shiki-keyword">import</span> <span class="shiki-variable">numpy</span> <span class="shiki-keyword">as</span> <span class="shiki-variable">np</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">typing</span> <span class="shiki-keyword">import</span> <span class="shiki-class">List</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.common</span> <span class="shiki-keyword">import</span> <span class="shiki-class">credential</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.common.profile.client_profile</span> <span class="shiki-keyword">import</span> <span class="shiki-class">ClientProfile</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.common.profile.http_profile</span> <span class="shiki-keyword">import</span> <span class="shiki-class">HttpProfile</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.common.exception.tencent_cloud_sdk_exception</span> <span class="shiki-keyword">import</span> <span class="shiki-class">TencentCloudSDKException</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.lkeap.v20240522</span> <span class="shiki-keyword">import</span> <span class="shiki-variable">lkeap_client</span>, <span class="shiki-variable">models</span>
+
+
+<span class="shiki-keyword">def</span> <span class="shiki-function">encode</span>(<span class="shiki-variable">client</span>, <span class="shiki-variable">inputs</span>, <span class="shiki-variable">is_query</span>=<span class="shiki-keyword">False</span>):
+    <span class="shiki-keyword">if</span> <span class="shiki-variable">is_query</span>:
+        <span class="shiki-variable">instruction</span> <span class="shiki-operator">=</span> <span class="shiki-string">"Instruction: Given a search query, retrieve web passages that answer the question \nQuery: "</span>
+    <span class="shiki-keyword">else</span>:
+        <span class="shiki-variable">instruction</span> <span class="shiki-operator">=</span> <span class="shiki-string">""</span>
+
+    <span class="shiki-variable">params</span> <span class="shiki-operator">=</span> {
+        <span class="shiki-string">"Model"</span>: <span class="shiki-variable">model_name</span>,
+        <span class="shiki-string">"Inputs"</span>: <span class="shiki-variable">inputs</span>,
+        <span class="shiki-string">"Instruction"</span>: <span class="shiki-variable">instruction</span>
+    }
+
+    <span class="shiki-variable">req</span> <span class="shiki-operator">=</span> <span class="shiki-variable">models</span>.<span class="shiki-class">GetEmbeddingRequest</span>()
+    <span class="shiki-variable">req</span>.<span class="shiki-function">from_json_string</span>(<span class="shiki-variable">json</span>.<span class="shiki-function">dumps</span>(<span class="shiki-variable">params</span>))
+
+    <span class="shiki-variable">resp</span> <span class="shiki-operator">=</span> <span class="shiki-variable">client</span>.<span class="shiki-function">GetEmbedding</span>(<span class="shiki-variable">req</span>)
+    <span class="shiki-variable">resp</span> <span class="shiki-operator">=</span> <span class="shiki-variable">json</span>.<span class="shiki-function">loads</span>(<span class="shiki-variable">resp</span>.<span class="shiki-function">to_json_string</span>())
+    <span class="shiki-variable">outputs</span> <span class="shiki-operator">=</span>[<span class="shiki-variable">item</span>[<span class="shiki-string">"Embedding"</span>] <span class="shiki-keyword">for</span> <span class="shiki-variable">item</span> <span class="shiki-keyword">in</span> <span class="shiki-variable">resp</span>[<span class="shiki-string">"Data"</span>]]
+    <span class="shiki-keyword">return</span> <span class="shiki-variable">outputs</span>
+
+<span class="shiki-variable">secret_id</span> <span class="shiki-operator">=</span> <span class="shiki-variable">os</span>.<span class="shiki-function">getenv</span>(<span class="shiki-string">"TENCENTCLOUD_SECRET_ID"</span>)
+<span class="shiki-variable">secret_key</span> <span class="shiki-operator">=</span> <span class="shiki-variable">os</span>.<span class="shiki-function">getenv</span>(<span class="shiki-string">"TENCENTCLOUD_SECRET_KEY"</span>)
+
+<span class="shiki-variable">cred</span> <span class="shiki-operator">=</span> <span class="shiki-variable">credential</span>.<span class="shiki-class">Credential</span>(<span class="shiki-variable">secret_id</span>, <span class="shiki-variable">secret_key</span>)
+
+<span class="shiki-variable">httpProfile</span> <span class="shiki-operator">=</span> <span class="shiki-class">HttpProfile</span>()
+<span class="shiki-variable">httpProfile</span>.<span class="shiki-variable">endpoint</span> <span class="shiki-operator">=</span> <span class="shiki-string">"lkeap.test.tencentcloudapi.com"</span>
+
+<span class="shiki-variable">clientProfile</span> <span class="shiki-operator">=</span> <span class="shiki-class">ClientProfile</span>()
+<span class="shiki-variable">clientProfile</span>.<span class="shiki-variable">httpProfile</span> <span class="shiki-operator">=</span> <span class="shiki-variable">httpProfile</span>
+<span class="shiki-variable">client</span> <span class="shiki-operator">=</span> <span class="shiki-variable">lkeap_client</span>.<span class="shiki-class">LkeapClient</span>(<span class="shiki-variable">cred</span>, <span class="shiki-string">"ap-guangzhou"</span>, <span class="shiki-variable">clientProfile</span>)
+<span class="shiki-variable">model_name</span> <span class="shiki-operator">=</span> <span class="shiki-string">"youtu-embedding-v1"</span>
+
+<span class="shiki-variable">inputs</span> <span class="shiki-operator">=</span> [<span class="shiki-string">"Regular exercise is the key to staying healthy."</span>]
+<span class="shiki-variable">embeddings</span> <span class="shiki-operator">=</span> <span class="shiki-function">encode</span>(<span class="shiki-variable">client</span>, <span class="shiki-variable">inputs</span>, <span class="shiki-variable">is_query</span>=<span class="shiki-keyword">False</span>)
+<span class="shiki-function">print</span>(<span class="shiki-variable">embeddings</span>)
+</code></pre>
+                    </section>
+                </div>
+
+                <div id="lang-zh" class="lang-content space-y-10" style="display: none;">
+                    
+                    <section>
+                        <h2 class="text-3xl font-semibold border-b border-slate-200 pb-3 mb-6 text-slate-900 text-center">介绍</h2>
+                        <p class="mb-4 text-slate-600 leading-relaxed">
+                            Youtu-Embedding-V1 是一款功能强大、用途广泛的通用文本表示模型。它通过 API 提供服务，并因以下原因在竞争者中脱颖而出：
+                        </p>
+                        <ol class="list-decimal list-inside space-y-3 pl-4 text-slate-600 leading-relaxed">
+                            <li><strong class="text-slate-800">创新性</strong>: Youtu-Embedding-V1 基于腾讯自研的 CoDi 框架进行训练。我们在统一格式化、损失函数和采样策略方面的创新，使得模型能够以更小的参数规模和更低的训练成本在多个任务上实现全面收敛。更多细节请参考我们的<a href="https://arxiv.org/abs/2408.11442v1" target="_blank" class="text-blue-600 hover:underline">论文</a>。</li>
+                            <li><strong class="text-slate-800">通用性</strong>: Youtu-Embedding-V1 在信息检索、语义相似度、自然语言推断、文本分类和文本聚类等一系列任务上表现出强大的泛化能力。此外，我们支持自定义指令，以使模型适应特定的下游场景。</li>
+                            <li><strong class="text-slate-800">可扩展性</strong>: 我们计划在不久的将来开源用于 Youtu-Embedding-V1 的训练框架，这将使您能够轻松地将其迁移到其他类型的任务中。</li>
+                        </ol>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-semibold border-b border-slate-200 pb-3 mb-6 text-slate-900 text-center">性能</h2>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm text-center rounded-lg shadow-sm">
+                                <caption class="text-2xl font-semibold p-4 text-slate-900">C-MTEB</caption>
+                                <thead class="bg-slate-50 text-slate-600 font-medium">
+                                    <tr>
+                                        <th class="p-3">模型</th>
+                                        <th class="p-3">Mean(Task)</th>
+                                        <th class="p-3">Mean(Type)</th>
+                                        <th class="p-3">Class.</th>
+                                        <th class="p-3">Clust.</th>
+                                        <th class="p-3">Pair Class.</th>
+                                        <th class="p-3">Rerank.</th>
+                                        <th class="p-3">Retr.</th>
+                                        <th class="p-3">STS</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr class="hover:bg-slate-50/70"><td>gte-Qwen2-1.5B-instruct</td><td>67.12</td><td>67.79</td><td>72.53</td><td>54.61</td><td>79.50</td><td>68.21</td><td>71.86</td><td>60.05</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>bge-multilingual-gemma2</td><td>67.64</td><td>68.52</td><td>75.31</td><td>59.30</td><td>86.67</td><td>68.28</td><td>73.73</td><td>55.19</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>ritrieve_zh_v1</td><td>72.71</td><td>73.85</td><td>76.88</td><td>66.50</td><td>85.98</td><td>72.86</td><td>76.97</td><td>63.92</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>Qwen3-Embedding-4B</td><td>72.27</td><td>73.51</td><td>75.46</td><td>77.89</td><td>83.34</td><td>66.05</td><td>77.03</td><td>61.26</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>Qwen3-Embedding-8B</td><td>73.84</td><td>75.00</td><td>76.97</td><td>80.08</td><td>84.23</td><td>66.99</td><td>78.21</td><td>63.53</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>Conan-embedding-v2</td><td>74.24</td><td>75.99</td><td>76.47</td><td>68.84</td><td>92.44</td><td>74.41</td><td>78.31</td><td>65.48</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>Seed1.6-embedding</td><td>75.63</td><td>76.68</td><td>77.98</td><td>73.11</td><td>88.71</td><td>71.65</td><td>79.69</td><td>68.94</td></tr>
+                                    <tr class="hover:bg-slate-50/70"><td>QZhou-Embedding</td><td>76.99</td><td>78.58</td><td>79.99</td><td>70.91</td><td>95.07</td><td>74.85</td><td>78.80</td><td>71.89</td></tr>
+                                    <tr class="bg-blue-100 font-semibold text-black-800 hover:bg-blue-200/60">
+                                        <td>Youtu-Embedding-V1</td>
+                                        <td><strong>77.60</strong></td>
+                                        <td><strong>78.85</strong></td>
+                                        <td>78.04</td>
+                                        <td>79.67</td>
+                                        <td>89.69</td>
+                                        <td>73.85</td>
+                                        <td>80.95</td>
+                                        <td>70.91</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    
+                    <section>
+                        <h2 class="text-3xl font-semibold border-b border-slate-200 pb-3 mb-6 text-slate-900 text-center">使用方法</h2>
+                        <p class="mb-4 text-slate-600 leading-relaxed">
+                            API 使用指南:
+                            <a href="https://cloud.tencent.com/document/product/1772/115343" target="_blank" class="ml-2 text-lg text-blue-600 hover:text-blue-500 font-medium">腾讯云API</a>
+                        </p>
+                        <pre><code class="language-python">
+<span class="shiki-keyword">import</span> <span class="shiki-variable">os</span>
+<span class="shiki-keyword">import</span> <span class="shiki-variable">json</span>
+<span class="shiki-keyword">import</span> <span class="shiki-variable">types</span>
+<span class="shiki-keyword">import</span> <span class="shiki-variable">numpy</span> <span class="shiki-keyword">as</span> <span class="shiki-variable">np</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">typing</span> <span class="shiki-keyword">import</span> <span class="shiki-class">List</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.common</span> <span class="shiki-keyword">import</span> <span class="shiki-class">credential</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.common.profile.client_profile</span> <span class="shiki-keyword">import</span> <span class="shiki-class">ClientProfile</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.common.profile.http_profile</span> <span class="shiki-keyword">import</span> <span class="shiki-class">HttpProfile</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.common.exception.tencent_cloud_sdk_exception</span> <span class="shiki-keyword">import</span> <span class="shiki-class">TencentCloudSDKException</span>
+<span class="shiki-keyword">from</span> <span class="shiki-variable">tencentcloud.lkeap.v20240522</span> <span class="shiki-keyword">import</span> <span class="shiki-variable">lkeap_client</span>, <span class="shiki-variable">models</span>
+
+
+<span class="shiki-keyword">def</span> <span class="shiki-function">encode</span>(<span class="shiki-variable">client</span>, <span class="shiki-variable">inputs</span>, <span class="shiki-variable">is_query</span>=<span class="shiki-keyword">False</span>):
+    <span class="shiki-keyword">if</span> <span class="shiki-variable">is_query</span>:
+        <span class="shiki-variable">instruction</span> <span class="shiki-operator">=</span> <span class="shiki-string">"Instruction: Given a search query, retrieve web passages that answer the question \nQuery: "</span>
+    <span class="shiki-keyword">else</span>:
+        <span class="shiki-variable">instruction</span> <span class="shiki-operator">=</span> <span class="shiki-string">""</span>
+
+    <span class="shiki-variable">params</span> <span class="shiki-operator">=</span> {
+        <span class="shiki-string">"Model"</span>: <span class="shiki-variable">model_name</span>,
+        <span class="shiki-string">"Inputs"</span>: <span class="shiki-variable">inputs</span>,
+        <span class="shiki-string">"Instruction"</span>: <span class="shiki-variable">instruction</span>
+    }
+
+    <span class="shiki-variable">req</span> <span class="shiki-operator">=</span> <span class="shiki-variable">models</span>.<span class="shiki-class">GetEmbeddingRequest</span>()
+    <span class="shiki-variable">req</span>.<span class="shiki-function">from_json_string</span>(<span class="shiki-variable">json</span>.<span class="shiki-function">dumps</span>(<span class="shiki-variable">params</span>))
+
+    <span class="shiki-variable">resp</span> <span class="shiki-operator">=</span> <span class="shiki-variable">client</span>.<span class="shiki-function">GetEmbedding</span>(<span class="shiki-variable">req</span>)
+    <span class="shiki-variable">resp</span> <span class="shiki-operator">=</span> <span class="shiki-variable">json</span>.<span class="shiki-function">loads</span>(<span class="shiki-variable">resp</span>.<span class="shiki-function">to_json_string</span>())
+    <span class="shiki-variable">outputs</span> <span class="shiki-operator">=</span>[<span class="shiki-variable">item</span>[<span class="shiki-string">"Embedding"</span>] <span class="shiki-keyword">for</span> <span class="shiki-variable">item</span> <span class="shiki-keyword">in</span> <span class="shiki-variable">resp</span>[<span class="shiki-string">"Data"</span>]]
+    <span class="shiki-keyword">return</span> <span class="shiki-variable">outputs</span>
+
+<span class="shiki-variable">secret_id</span> <span class="shiki-operator">=</span> <span class="shiki-variable">os</span>.<span class="shiki-function">getenv</span>(<span class="shiki-string">"TENCENTCLOUD_SECRET_ID"</span>)
+<span class="shiki-variable">secret_key</span> <span class="shiki-operator">=</span> <span class="shiki-function">os</span>.<span class="shiki-function">getenv</span>(<span class="shiki-string">"TENCENTCLOUD_SECRET_KEY"</span>)
+
+<span class="shiki-variable">cred</span> <span class="shiki-operator">=</span> <span class="shiki-variable">credential</span>.<span class="shiki-class">Credential</span>(<span class="shiki-variable">secret_id</span>, <span class="shiki-variable">secret_key</span>)
+
+<span class="shiki-variable">httpProfile</span> <span class="shiki-operator">=</span> <span class="shiki-class">HttpProfile</span>()
+<span class="shiki-variable">httpProfile</span>.<span class="shiki-variable">endpoint</span> <span class="shiki-operator">=</span> <span class="shiki-string">"lkeap.test.tencentcloudapi.com"</span>
+
+<span class="shiki-variable">clientProfile</span> <span class="shiki-operator">=</span> <span class="shiki-class">ClientProfile</span>()
+<span class="shiki-variable">clientProfile</span>.<span class="shiki-variable">httpProfile</span> <span class="shiki-operator">=</span> <span class="shiki-variable">httpProfile</span>
+<span class="shiki-variable">client</span> <span class="shiki-operator">=</span> <span class="shiki-variable">lkeap_client</span>.<span class="shiki-class">LkeapClient</span>(<span class="shiki-variable">cred</span>, <span class="shiki-string">"ap-guangzhou"</span>, <span class="shiki-variable">clientProfile</span>)
+<span class="shiki-variable">model_name</span> <span class="shiki-operator">=</span> <span class="shiki-string">"youtu-embedding-v1"</span>
+
+<span class="shiki-variable">inputs</span> <span class="shiki-operator">=</span> [<span class="shiki-string">"Regular exercise is the key to staying healthy."</span>]
+<span class="shiki-variable">embeddings</span> <span class="shiki-operator">=</span> <span class="shiki-function">encode</span>(<span class="shiki-variable">client</span>, <span class="shiki-variable">inputs</span>, <span class="shiki-variable">is_query</span>=<span class="shiki-keyword">False</span>)
+<span class="shiki-function">print</span>(<span class="shiki-variable">embeddings</span>)
+</code></pre>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // --- Language Switching Logic ---
+        const btnEn = document.getElementById('btn-en');
+        const btnZh = document.getElementById('btn-zh');
+        const contentEn = document.getElementById('lang-en');
+        const contentZh = document.getElementById('lang-zh');
+        const langKey = 'youtu-embedding-lang';
+
+        function setLanguage(lang) {
+            if (lang === 'zh') {
+                contentEn.style.display = 'none';
+                contentZh.style.display = 'block';
+                btnZh.classList.add('active');
+                btnEn.classList.remove('active');
+                localStorage.setItem(langKey, 'zh');
+            } else {
+                contentZh.style.display = 'none';
+                contentEn.style.display = 'block';
+                btnEn.classList.add('active');
+                btnZh.classList.remove('active');
+                localStorage.setItem(langKey, 'en');
+            }
+        }
+
+        btnEn.addEventListener('click', () => setLanguage('en'));
+        btnZh.addEventListener('click', () => setLanguage('zh'));
+
+        // On page load, check for saved language or default to English
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem(langKey);
+            // If a language is saved in local storage, use it. Otherwise, default to English.
+            if (savedLang) {
+                setLanguage(savedLang);
+            } else {
+                setLanguage('en'); 
+            }
+        });
+    </script>
+</body>
+</html>
